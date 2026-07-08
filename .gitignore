@@ -26,3 +26,9 @@ build/
 
 # Prisma
 prisma/migrations/dev.db
+/generated/prisma
+
+
+
+
+/generated/prisma
