@@ -11,11 +11,6 @@
 
 </div>
 
-> Projeto pessoal de prática, desenvolvido para treinar a construção de uma API REST do zero com Node.js, Express,
-> Prisma e MongoDB. Não é vinculado a nenhuma disciplina ou trabalho em grupo — feito individualmente para consolidar
-> conceitos de backend.
-
----
 
 ## 📋 Sobre o projeto
 
