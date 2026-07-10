@@ -24,6 +24,7 @@ app.post('/usuarios', async (req, res) => {
   }
 })
 
+
 app.get('/usuarios', async (req, res) => {
 
   let users = []
@@ -38,6 +39,7 @@ app.get('/usuarios', async (req, res) => {
 
   res.status(200).json(users)
 })
+
 
 app.put('/usuarios/:id', async (req, res) => {
   try {
