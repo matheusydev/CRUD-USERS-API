@@ -22,6 +22,7 @@ app.post('/usuarios', async (req, res) => {
     })
     res.status(201).json(newUser)
   } catch (error) {
+    console.error(error)
     res.status(400).json({ message: 'Erro ao criar usuário', error: error.message })
   }
 })
