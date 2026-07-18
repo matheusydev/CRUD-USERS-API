@@ -4,10 +4,12 @@
 
 ### API REST para gerenciamento de usuários, construída como projeto de prática em Node.js
 
-[![Node.js](https://img.shields.io/badge/Node.js-24.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-5.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-24.11.1-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-5.2.1-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.19.3-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/docs)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+
+**🔗 Link da API: [https://crud-users-api-4zzn.onrender.com](https://crud-users-api-4zzn.onrender.com)**
 
 </div>
 
@@ -22,6 +24,7 @@ O foco principal do projeto foi praticar:
 - Modelagem de dados no Prisma para um banco não-relacional (MongoDB)
 - Operações de CRUD (Create, Read, Update, Delete) via Prisma Client
 - Tratamento de erros nas rotas de escrita/remoção
+- Deploy em produção (Render) e configuração de CORS para consumo por um front-end externo
 
 ---
 
@@ -35,6 +38,7 @@ O foco principal do projeto foi praticar:
 | @prisma/client| 6.19.3 | Client gerado para consultas type-safe      |
 | MongoDB Atlas | —      | Banco de dados na nuvem (NoSQL)             |
 | dotenv        | —      | Carregamento de variáveis de ambiente       |
+| cors          | —      | Liberação de requisições de outra origem (front-end) |
 
 ---
 
@@ -65,12 +69,9 @@ model User {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   email String @unique
   name  String
-  age   String
+  age   Int
 }
 ```
-
-> **Nota:** o campo `age` está como `String` por enquanto — é um ponto que pretendo revisar futuramente (provavelmente
-> para `Int`), mas ficou assim durante o desenvolvimento inicial do CRUD.
 
 ---
 
@@ -120,7 +121,7 @@ A API estará disponível em `http://localhost:3000/`
 {
   "email": "maria@email.com",
   "name": "Maria Silva",
-  "age": "28"
+  "age": 28
 }
 ```
 
@@ -162,10 +163,26 @@ o formato clássico de `datasource` no `schema.prisma`.
 Diferente de bancos relacionais, o MongoDB não suporta `autoincrement()`. O Prisma exige que o identificador seja do
 tipo `String`, mapeado para o `_id` nativo do MongoDB via `@map("_id") @db.ObjectId`.
 
+### `age` como `Int`
+
+O campo `age` começou como `String` durante o desenvolvimento inicial do CRUD e foi revisado posteriormente para
+`Int`, refletindo corretamente o tipo semântico do dado e permitindo comparações e ordenações no futuro.
+
 ### Tratamento de erros nas rotas de escrita
 
 As rotas `POST`, `PUT` e `DELETE` usam `try/catch` para capturar erros do Prisma (como tentar atualizar ou deletar um
 `id` inexistente) e devolver respostas HTTP apropriadas, em vez de deixar a exceção derrubar a requisição.
+
+### CORS habilitado para consumo externo
+
+Como a API é consumida por um front-end hospedado em outra origem ([CRUD-USERS-WEB](https://github.com/matheusydev/CRUD-USERS-WEB)),
+o middleware `cors` foi adicionado para liberar as requisições do navegador.
+
+### Geração automática do Prisma Client no deploy
+
+Como a pasta `generated/prisma` é ignorada no Git, o script `postinstall` foi configurado no `package.json` para
+rodar `prisma generate` automaticamente após o `npm install` no Render, evitando o erro `ERR_MODULE_NOT_FOUND` em
+produção.
 
 ---
 
@@ -180,7 +197,6 @@ As rotas `POST`, `PUT` e `DELETE` usam `try/catch` para capturar erros do Prisma
 - ✅ Filtros de consulta com `where` a partir de query strings (`req.query`)
 - ✅ Tratamento de erros em rotas assíncronas com `try/catch`
 - ✅ Boas práticas de `.gitignore` para projetos com Prisma (variáveis de ambiente e client gerado)
+- ✅ Configuração de CORS para consumo por um front-end em outra origem
+- ✅ Deploy em produção no Render, incluindo dependências corretas e geração automática do Prisma Client via `postinstall`
 - ✅ Fluxo de Git com Conventional Commits e branches (`feat/`, `fix/`, `chore/`)
-
-
-
